@@ -1,0 +1,31 @@
+[gd_scene load_steps=6 format=3 uid="uid://cb64c02s3o4le"]
+
+[ext_resource type="PackedScene" uid="uid://doq4tjw3wiip7" path="res://Scenes/Player/Player.tscn" id="1_5mru2"]
+[ext_resource type="Script" path="res://Scenes/BattleField/GDBattleField.gd" id="1_k5dbl"]
+[ext_resource type="PackedScene" uid="uid://ddms5ci7qvtpd" path="res://Scenes/Pool/Pool.tscn" id="2_g83fm"]
+[ext_resource type="PackedScene" uid="uid://bxjkvxnr2vn6d" path="res://Scenes/Enemy/Enemy.tscn" id="3_kmt6r"]
+[ext_resource type="PackedScene" uid="uid://mtoy87whuldu" path="res://Scenes/Bullet/Bullet.tscn" id="3_vo5td"]
+
+[node name="BattleField" type="Node2D"]
+script = ExtResource("1_k5dbl")
+path_pool_enemies = NodePath("Origin/PoolEnemies")
+
+[node name="Origin" type="Node2D" parent="."]
+position = Vector2(350, 350)
+
+[node name="PoolBullets" parent="Origin" instance=ExtResource("2_g83fm")]
+initial_spawn = 20
+item = ExtResource("3_vo5td")
+
+[node name="PoolEnemies" parent="Origin" instance=ExtResource("2_g83fm")]
+initial_spawn = 20
+item = ExtResource("3_kmt6r")
+
+[node name="Player" parent="Origin" instance=ExtResource("1_5mru2")]
+path_pool_bullets = NodePath("../PoolBullets")
+
+[node name="spawner_timer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="timeout" from="spawner_timer" to="." method="timer_spawn_enemy"]
